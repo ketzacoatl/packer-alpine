@@ -1,0 +1,51 @@
+{
+  "variables": {
+    "version": "3.6.1",
+    "headless": "false",
+    "disk_size": "1024",
+    "memory": "512",
+    "cpus": "1",
+    "ssh_password": "alpine",
+    "ssh_wait_timeout": "90s",
+    "out_dir": "out",
+    "source_path": "../00-iso-install/output-virtualbox-iso",
+    "shutdown_command": "poweroff"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "source_path": "{{user `source_path`}}/alpine-amd64-{{user `version`}}.ovf",
+      "boot_wait": "30s",
+      "vm_name": "alpine-amd64-{{user `version`}}",
+      "guest_additions_mode": "disable",
+      "headless": "{{user `headless`}}",
+      "ssh_username": "root",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}",
+      "shutdown_command": "{{user `shutdown_command`}}",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}"],
+        ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "/bin/sh -x '{{.Path}}'",
+      "scripts": [
+        "scripts/00-apk.sh",
+        "scripts/01-sshd.sh",
+        "scripts/02-vagrant.sh",
+        "scripts/03-sudo.sh",
+        "scripts/98-cleanup.sh",
+        "scripts/99-minimize.sh"
+      ]
+    }
+  ],
+  "post-processors": [{
+    "type": "vagrant",
+    "keep_input_artifact": true,
+    "output": "{{user `out_dir`}}/alpine-base-{{user `version`}}.box"
+  }]
+}
