@@ -7,5 +7,7 @@ rm -f /EMPTY
 sync
 sync
 sync
-
+sleep 1
+df -h
+du -sh /*
 exit 0
