@@ -3,11 +3,11 @@
 
 Vagrant.configure(2) do |config|
     config.vm.define 'alpine' do |alpine|
-        #alpine.vm.box = 'alpine-clean-3.6.1'
+        #alpine.vm.box = 'alpine-clean-3.9.3'
         #alpine.ssh.username = 'root'
         #alpine.ssh.password = 'alpine'
 
-        alpine.vm.box = 'alpine-base-3.6.1'
+        alpine.vm.box = 'alpine-base-3.9.3'
         #alpine.ssh.username = 'vagrant'
         #alpine.ssh.password = 'vagrant'
 
@@ -40,7 +40,7 @@ Vagrant.configure(2) do |config|
             vb.memory = 512
             vb.customize [
                 'modifyvm', :id,
-                '--natdnshostresolver1', 'on',
+                '--natdnsproxy', 'on',
                 '--nic1', 'nat',
                 '--cableconnected1', 'on'
             ]

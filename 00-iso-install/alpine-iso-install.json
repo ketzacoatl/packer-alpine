@@ -1,68 +1,67 @@
 {
   "variables": {
-    "iso_file": "https://nl.alpinelinux.org/alpine/v3.6/releases/x86_64/alpine-virt-3.6.1-x86_64.iso",
-    "iso_checksum": "f4421357ed2c969046b95cef6fc4844aeebfe8a2323049915dbe953d5f1d3c36",
-    "name": "alpine-clean",
-    "version": "3.6.1",
+    "iso_file": "http://dl-4.alpinelinux.org/alpine/v3.9/releases/x86_64/alpine-virt-3.9.3-x86_64.iso",
+    "iso_checksum": "98e2eb7cfe74ede72d99cfd574a3c5e85a9aca5743d786abc9bbe7e0923f211b",
+    "iso_checksum_type": "sha256",
+	"name": "alpine-clean",
+    "version": "3.9.3",
     "headless": "false",
+	"provisioners-breakpoint-disable": "true",
     "disk_size": "2048",
     "memory": "512",
     "cpus": "1",
-    "ssh_password": "alpine",
-    "ssh_wait_timeout": "90s",
+    "ssh_password": "vagrant",
+	"boot_wait": "30s",
+    "ssh_wait_timeout": "1800s",
     "out_dir": "output-box",
     "shutdown_command": "poweroff"
   },
   "builders": [
     {
-      "boot_wait": "30s",
       "vm_name": "{{ user `name`}}-{{user `version`}}",
-      "type": "virtualbox-iso",
+	  "type": "virtualbox-iso",
       "guest_additions_mode": "disable",
-      "guest_os_type": "Linux26_64",
+      "guest_os_type": "Linux_64",
       "headless": "{{user `headless`}}",
       "disk_size": "{{user `disk_size`}}",
+	  "hard_drive_discard": true,
+      "hard_drive_interface": "sata",
       "iso_url": "{{user `iso_file`}}",
       "iso_checksum": "{{user `iso_checksum`}}",
-      "iso_checksum_type": "sha256",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "ssh_username": "root",
       "ssh_password": "{{user `ssh_password`}}",
       "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}",
       "shutdown_command": "{{user `shutdown_command`}}",
       "http_directory": "http",
+      "boot_wait": "{{user `boot_wait`}}",
       "boot_command": [
-        "<wait10><wait10><wait10>",
-        "<enter><wait5>root<enter><wait>",
-        "ifconfig eth0 up && udhcpc -i eth0<enter><wait5>",
-        "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/answers<enter><wait>",
-        "setup-alpine -f answers<enter><wait10>",
-        "alpine<enter><wait>",
-        "alpine<enter><wait10>",
-        "<wait10><wait10><wait10>",
-        "<wait10><wait10><wait10>",
-        "y<enter>",
-        "<wait10><wait10><wait10>",
-        "<wait10><wait10><wait10>",
-        "<wait10><wait10><wait10>",
-        "<wait10><wait10><wait10>",
-        "<wait10><wait10><wait10>",
-        "<wait10><wait10><wait10>",
-        "rc-service sshd stop<enter>",
-        "mount /dev/sda3 /mnt<enter>",
-        "echo 'PermitRootLogin yes' >> /mnt/etc/ssh/sshd_config<enter>",
-        "umount /mnt<enter>",
-        "reboot<enter>"
+        "<enter><wait10>",
+        "root<enter><wait>",
+        "ifconfig eth0 up && udhcpc -i eth0<enter><wait>",
+        "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/alpine39.answers.cfg<enter><wait>",
+        "sed -i -e \"/rc-service/d\" /sbin/setup-sshd<enter><wait>",
+        "printf \"vagrant\\nvagrant\\ny\\n\" | setup-alpine -f /root/alpine39.answers.cfg ; ",
+        "mount /dev/sda2 /mnt && ",
+        "echo 'PasswordAuthentication yes' >> /mnt/etc/ssh/sshd_config && ",
+        "echo 'PermitRootLogin yes' >> /mnt/etc/ssh/sshd_config && ",
+		"echo 'UseDNS no' >> /mnt/etc/ssh/sshd_config && ",
+        "umount /mnt/boot && umount /mnt ; reboot<enter>"
       ],
-      "hard_drive_interface": "sata",
-      "vboxmanage": [
+        "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}"],
         ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"]
+		["modifyvm", "{{.Name}}", "--natdnsproxy", "on",
       ]
 
     }
   ],
-  "provisioners": [],
-  "post-processors": [{
+  "provisioners": [
+	{	"type": "breakpoint",	"disable": "{{user `provisioners-breakpoint-disable`}}",	"note": "provisioners breakpoint"	}
+  ],
+  "post-processors": [
+
+  {
     "type": "vagrant",
     "keep_input_artifact": true,
     "output": "{{user `out_dir`}}/{{user `name`}}-{{user `version`}}.box"

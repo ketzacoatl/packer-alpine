@@ -2,12 +2,14 @@
   "variables": {
     "src_name": "alpine-clean",
     "name": "alpine-base",
-    "version": "3.6.1",
+    "version": "3.9.3",
     "headless": "false",
+	"provisioners-breakpoint-disable": "true",
     "memory": "512",
     "cpus": "1",
-    "ssh_password": "alpine",
+    "ssh_password": "vagrant",
     "ssh_wait_timeout": "90s",
+	"___ssh_wait_timeout": "1800s",
     "out_dir": "output-box",
     "source_path": "../00-iso-install/output-virtualbox-iso",
     "shutdown_command": "poweroff"

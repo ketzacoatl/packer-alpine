@@ -1,6 +1,6 @@
 ## Alpine Linux Vagrant Box ala Packer
 
-Use `packer build ...` to create vagrant box to run Alpine Linux 3.6.x.
+Use `packer build ...` to create vagrant box to run Alpine Linux 3.9.x.
 
 Installing from an ISO can be a little tricky, and sensitive to load on the host,
 so we separate that into its own build:
@@ -29,5 +29,7 @@ over SSH, cleanup SSH keys and apk cache, etc.
 
 
 Thanks to [maier](https://github.com/maier/), and
-[higebu](https://github.com/higebu/packer-alpine) for prior art to base this
+[higebu](https://github.com/higebu/packer-alpine) 
+[ketzacoatl] https://github.com/ketzacoatl/packer-alpine
+for prior art to base this
 work on.
