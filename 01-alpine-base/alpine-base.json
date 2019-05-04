@@ -34,6 +34,7 @@
     }
   ],
   "provisioners": [
+  {	"type": "breakpoint",	"disable": "{{user `provisioners-breakpoint-disable`}}",	"note": "provisioners breakpoint"	},
     {
       "type": "shell",
       "execute_command": "/bin/sh -x '{{.Path}}'",
@@ -42,7 +43,7 @@
         "scripts/01-sshd.sh",
         "scripts/02-vagrant.sh",
         "scripts/03-sudo.sh",
-        "scripts/04-install-salt.sh",
+        "scripts/05-install-virtualbox-guest-additions.sh",
         "scripts/98-cleanup.sh",
         "scripts/99-minimize.sh"
       ]
