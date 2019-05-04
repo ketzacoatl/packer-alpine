@@ -1,10 +1,10 @@
 clean:
 	rm -rf output-virtualbox-iso
-	#rm -rf out
+	#rm -rf output-box
 	#vagrant destroy
 
 build:
 	packer build alpine-iso-install.json
 
 add-box:
-	vagrant box add alpine-clean-3.9.3 out/alpine-clean-3.9.3.box
+	vagrant box add alpine-clean-3.9.3 output-box/alpine-clean-3.9.3.box

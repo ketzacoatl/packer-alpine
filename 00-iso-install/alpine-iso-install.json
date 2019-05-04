@@ -50,8 +50,8 @@
       ],
         "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}"],
-        ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"]
-		["modifyvm", "{{.Name}}", "--natdnsproxy", "on",
+        ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"],
+		["modifyvm", "{{.Name}}", "--natdnsproxy1", "on"]
       ]
 
     }
