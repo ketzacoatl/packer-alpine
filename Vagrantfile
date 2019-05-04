@@ -30,7 +30,7 @@ Vagrant.configure(2) do |config|
         # comment the disabled synced_folder line above and
         # uncomment the following two lines
         #
-        alpine.vm.network 'private_network', ip: '192.168.100.10'
+        #alpine.vm.network 'private_network', ip: '192.168.100.10'
         #alpine.vm.synced_folder '.', '/vagrant', type: 'nfs'
 
         alpine.vm.provider 'virtualbox' do |vb|
@@ -40,7 +40,7 @@ Vagrant.configure(2) do |config|
             vb.memory = 512
             vb.customize [
                 'modifyvm', :id,
-                '--natdnsproxy', 'on',
+                '--natdnsproxy1', 'on',
                 '--nic1', 'nat',
                 '--cableconnected1', 'on'
             ]
