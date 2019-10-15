@@ -1,6 +1,9 @@
 #!/bin/sh -eux
 set -eux
 
+source /etc/profile
+###export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 retry() {
   local COUNT=1
   local RESULT=0

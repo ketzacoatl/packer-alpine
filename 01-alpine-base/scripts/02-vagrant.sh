@@ -1,5 +1,8 @@
 set -exu
 
+source /etc/profile
+###export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 date > /etc/vagrant.timestamp
 
 #

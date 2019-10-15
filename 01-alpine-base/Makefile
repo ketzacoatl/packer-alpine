@@ -4,10 +4,10 @@ build:
 
 clean:
 	#rm -rf
-	vagrant box remove alpine-base-3.9.3
+	vagrant box remove alpine-base-3.9.4
 
 add-box:
-	vagrant box add alpine-base-3.9.3 output-box/alpine-base-3.9.3.box
+	vagrant box add alpine-base-3.9.4 output-box/alpine-base-3.9.4.box
 
 vlist:
 	vagrant box list
