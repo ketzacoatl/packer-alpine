@@ -65,7 +65,20 @@
     }
   ],
   "provisioners": [
-	{	"type": "breakpoint",	"disable": "{{user `provisioners-breakpoint-disable`}}",	"note": "provisioners breakpoint"	}
+	{	"type": "breakpoint",	"disable": "{{user `provisioners-breakpoint-disable`}}",	"note": "provisioners breakpoint"	},
+	    {
+      "type": "shell",
+	  "environment_vars": [
+        "http_proxy={{user `proxy`}}",
+		"PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      ],
+	  "use_env_var_file": "true",
+      "execute_command": "/bin/sh -x '{{.Path}}'",
+      "scripts": [
+        "scripts/98-cleanup.sh",
+        "scripts/99-minimize.sh"
+      ]
+    }
   ],
   "post-processors": [
 
