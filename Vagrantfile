@@ -3,11 +3,11 @@
 
 Vagrant.configure(2) do |config|
     config.vm.define 'alpine' do |alpine|
-        #alpine.vm.box = 'alpine-clean-3.9.3'
+        #alpine.vm.box = 'alpine-clean-3.9.4'
         #alpine.ssh.username = 'root'
         #alpine.ssh.password = 'alpine'
 
-        alpine.vm.box = 'alpine-base-3.9.3'
+        alpine.vm.box = 'alpine-base-3.9.4'
         #alpine.ssh.username = 'vagrant'
         #alpine.ssh.password = 'vagrant'
 
