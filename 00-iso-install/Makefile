@@ -7,4 +7,4 @@ build:
 	packer build alpine-iso-install.json
 
 add-box:
-	vagrant box add alpine-clean-3.9.3 output-box/alpine-clean-3.9.3.box
+	vagrant box add alpine-clean-3.9.4 output-box/alpine-clean-3.9.4.box

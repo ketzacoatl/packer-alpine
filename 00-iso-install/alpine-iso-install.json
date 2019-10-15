@@ -1,20 +1,24 @@
 {
+"min_packer_version": "1.3.4",
   "variables": {
-    "iso_file": "http://dl-4.alpinelinux.org/alpine/v3.9/releases/x86_64/alpine-virt-3.9.3-x86_64.iso",
-    "iso_checksum": "98e2eb7cfe74ede72d99cfd574a3c5e85a9aca5743d786abc9bbe7e0923f211b",
+    "iso_file": "http://dl-4.alpinelinux.org/alpine/v3.9/releases/x86_64/alpine-virt-3.9.4-x86_64.iso",
+    "iso_checksum": "4122dce1092564aa88415c21702d6cb973a7d29f91658d24316f7f0aac3a6761",
+	"___iso_checksum_x86": "921d49142c6376b5196bb268a39e2da304b5e09dac65852f2af6ae9711ec62b4",
     "iso_checksum_type": "sha256",
 	"name": "alpine-clean",
-    "version": "3.9.3",
+    "version": "3.9.4",
     "headless": "false",
 	"provisioners-breakpoint-disable": "true",
+	"___provisioners-breakpoint-disable": "false",
     "disk_size": "2048",
     "memory": "512",
     "cpus": "1",
     "ssh_password": "vagrant",
-	"boot_wait": "30s",
+	"___boot_wait": "30s",
+	"boot_wait": "12s",
     "ssh_wait_timeout": "1800s",
     "out_dir": "output-box",
-    "shutdown_command": "poweroff"
+    "shutdown_command": "/sbin/poweroff"
   },
   "builders": [
     {
@@ -40,13 +44,17 @@
         "root<enter><wait>",
         "ifconfig eth0 up && udhcpc -i eth0<enter><wait>",
         "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/alpine39.answers.cfg<enter><wait>",
-        "sed -i -e \"/rc-service/d\" /sbin/setup-sshd<enter><wait>",
+        "#sed -i -e \"/rc-service/d\" /sbin/setup-sshd<enter><wait>",
+		"sed -i -e \"s/rc-service/###rc-service/\" /sbin/setup-sshd<enter><wait>",
         "printf \"vagrant\\nvagrant\\ny\\n\" | setup-alpine -f /root/alpine39.answers.cfg ; ",
-        "mount /dev/sda2 /mnt && ",
-        "echo 'PasswordAuthentication yes' >> /mnt/etc/ssh/sshd_config && ",
+		"mount /dev/sda2 /mnt && ",
+		"apk add --root /mnt dropbear dropbear-openrc dropbear-ssh dropbear-scp dropbear-convert ; ",
+		"apk add --root /mnt openssh-server ; ",
+		"echo 'PasswordAuthentication yes' >> /mnt/etc/ssh/sshd_config && ",
         "echo 'PermitRootLogin yes' >> /mnt/etc/ssh/sshd_config && ",
 		"echo 'UseDNS no' >> /mnt/etc/ssh/sshd_config && ",
-        "umount /mnt/boot && umount /mnt ; reboot<enter>"
+		"apk del --root /mnt openssh-server ; ",
+        "umount -r /mnt/boot ; umount -r /mnt ; reboot <enter>"
       ],
         "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}"],
