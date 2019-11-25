@@ -1,3 +1,6 @@
+.vagrant
+00-iso-install/output-box
+01-alpine-base/output-box
 output-vmware-iso
 packer_cache
 *.ovf

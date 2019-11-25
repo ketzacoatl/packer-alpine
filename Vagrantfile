@@ -3,11 +3,11 @@
 
 Vagrant.configure(2) do |config|
     config.vm.define 'alpine' do |alpine|
-        #alpine.vm.box = 'alpine-clean-3.6.1'
+        #alpine.vm.box = 'alpine-clean-3.9.4'
         #alpine.ssh.username = 'root'
         #alpine.ssh.password = 'alpine'
 
-        alpine.vm.box = 'alpine-base-3.6.1'
+        alpine.vm.box = 'alpine-base-3.9.4'
         #alpine.ssh.username = 'vagrant'
         #alpine.ssh.password = 'vagrant'
 
@@ -30,7 +30,7 @@ Vagrant.configure(2) do |config|
         # comment the disabled synced_folder line above and
         # uncomment the following two lines
         #
-        alpine.vm.network 'private_network', ip: '192.168.100.10'
+        #alpine.vm.network 'private_network', ip: '192.168.100.10'
         #alpine.vm.synced_folder '.', '/vagrant', type: 'nfs'
 
         alpine.vm.provider 'virtualbox' do |vb|
@@ -40,7 +40,7 @@ Vagrant.configure(2) do |config|
             vb.memory = 512
             vb.customize [
                 'modifyvm', :id,
-                '--natdnshostresolver1', 'on',
+                '--natdnsproxy1', 'on',
                 '--nic1', 'nat',
                 '--cableconnected1', 'on'
             ]

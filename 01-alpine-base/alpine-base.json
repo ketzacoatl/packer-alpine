@@ -1,23 +1,30 @@
 {
+"min_packer_version": "1.3.4",
   "variables": {
     "src_name": "alpine-clean",
     "name": "alpine-base",
-    "version": "3.6.1",
+    "version": "3.9.4",
     "headless": "false",
+	"provisioners-breakpoint-disable": "true",
+	"___provisioners-breakpoint-disable": "false",
     "memory": "512",
     "cpus": "1",
-    "ssh_password": "alpine",
+    "ssh_password": "vagrant",
     "ssh_wait_timeout": "90s",
+	"___ssh_wait_timeout": "1800s",
+	"___boot_wait": "30s",
+	"boot_wait": "12s",
     "out_dir": "output-box",
     "source_path": "../00-iso-install/output-virtualbox-iso",
-    "shutdown_command": "poweroff"
+    "___shutdown_command": "poweroff",
+	"shutdown_command": "/sbin/poweroff"
   },
   "builders": [
     {
       "type": "virtualbox-ovf",
       "source_path": "{{user `source_path`}}/{{user `src_name`}}-{{user `version`}}.ovf",
       "virtualbox_version_file": ".vbox_version",
-      "boot_wait": "30s",
+      "boot_wait": "{{user `boot_wait`}}",
       "vm_name": "alpine-amd64-{{user `version`}}",
       "guest_additions_mode": "disable",
       "headless": "{{user `headless`}}",
@@ -32,15 +39,21 @@
     }
   ],
   "provisioners": [
+  {	"type": "breakpoint",	"disable": "{{user `provisioners-breakpoint-disable`}}",	"note": "provisioners breakpoint"	},
     {
       "type": "shell",
+	  "environment_vars": [
+        "http_proxy={{user `proxy`}}",
+		"PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      ],
+	  "use_env_var_file": "true",
       "execute_command": "/bin/sh -x '{{.Path}}'",
       "scripts": [
         "scripts/00-apk.sh",
         "scripts/01-sshd.sh",
         "scripts/02-vagrant.sh",
         "scripts/03-sudo.sh",
-        "scripts/04-install-salt.sh",
+        "scripts/05-install-virtualbox-guest-additions.sh",
         "scripts/98-cleanup.sh",
         "scripts/99-minimize.sh"
       ]
